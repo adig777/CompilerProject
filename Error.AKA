@@ -1,0 +1,29 @@
+Error {
+$ This will cause Errors $
+def err(number y : string j){
+  j = "Hello World";
+ }
+  main{
+  number z = "Hello";
+  numberr t = err(5);
+  string x = "World"
+  bool a True;
+}
+}
+
+$ Output:
+
+PASS 1 Syntax: 
+
+===== SYNTAX ERRORS =====
+
+Line Message                            
+---- -------                            
+008  no viable alternative at input 'numberrt'
+010  missing ';' at 'bool'              
+010  missing '=' at 'True'              
+
+There were 3 syntax errors.
+Object file not created or modified.
+
+Process finished with exit code 0 $

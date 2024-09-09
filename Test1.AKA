@@ -1,0 +1,29 @@
+test1 {
+	main{
+		number x = 5;
+		x = 6;
+		number y = -5;
+		number k = x + y;
+		display(k);
+		string a = "Hello";
+		string b = "World";
+		string c = a + " " + b + " " + x;
+		display(c);
+		
+		$
+		display(a + x);
+		$
+		
+		$
+		number m = 5;
+		number m = 6;
+		$
+	}
+}
+
+$ Output:
+1.000000
+Hello World 6.0
+
+[1 milliseconds execution time.]
+$

@@ -1,0 +1,26 @@
+Test4{
+    main {
+    number n = 5;
+    bool b = True;
+    string h = "Y";
+    guard(n == 5){
+        display("Hello");
+        guard(h == "Y", b){
+            display("!!! ");
+            b = False;
+            display("?!?!?!");
+        }
+        display("World!");
+        n = 3;
+        display("!!!!!!!!");
+    }
+}
+}
+
+$Output:
+Hello
+!!! 
+World!
+
+[0 milliseconds execution time.]
+$

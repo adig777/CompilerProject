@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>AKA.g4</title>
+<style type="text/css">
+body { 
+  color: #000;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin: 20px 5px 10px 20px;
+}
+/* resets */
+ul {
+  list-style: none;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+img {
+  border: 0;
+}
+.clear {
+  clear: both;
+}
+.container {
+  position: relative;
+}
+/* Grammar name */
+h1 {
+  font-size: 20px;
+}
+/*Grammar documentation*/
+.gdoc {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+#index {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  overflow: auto;
+}
+#index h2 {
+  margin: 0;
+}
+#index ol {
+  padding-left: 30px;
+  list-style-type: square;
+  color: #364559;
+}
+#index ol li {
+  margin: 2px 0;
+}
+#index ol li a {
+  color: #366199;
+  font-family: monospace;
+}
+#rules {
+  margin-left: 210px;
+  padding-left: 20px;
+  border-left: 1px solid #AAA;
+}
+.rule {
+  margin-bottom: 30px;
+}
+/* Rule name*/
+.rule h3 {
+  color: #364559;
+  background-color: #DADFE6;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 5px;
+  border-bottom: 1px solid #828B99;
+}
+.rule h3 a.topLink {
+  font-family: sans-serif;
+  font-size: 10px;
+  color: #000;
+  margin-left: 20px;
+}
+.rule h3, .rule .ebnf div {
+  font-family: monospace;
+}
+/* Sections: ebnf, railroad*/
+.doc, .ebnf, .railroad {
+  padding-left: 20px;
+}
+.doc h4, .ebnf h4, .railroad h4 {
+  font-size: 12px;
+  margin: 15px 0 10px -20px;
+}
+.ebnf div {
+  background-color: #F7F7F7;
+  border-top: 1px solid #E8E8E8;
+  border-bottom: 1px solid #E8E8E8;
+  padding: 10px 5px;
+}
+.ebnf div .literal {
+  color: #0000FF;
+}
+.ebnf div .keyword {
+  color: #7F0055;
+  font-weight: bold;
+}
+.ebnf div .rule {
+  color: #004084;
+  font-weight: bold;
+}
+.ebnf div .token {
+  font-style:italic;
+}
+.railroad img {
+  display: block;
+}
+footer {
+  float: right;
+}
+</style>
+</head>
+<body>
+<h1><a href="AKA.g4.html" name="top">AKA</a></h1>
+<p class="gdoc"></p>
+<div class="container">
+<div id="index">
+<h2>Rules</h2>
+<ol>
+  <li><a href="#NUMBER">NUMBER</a></li>
+  <li><a href="#BOOL">BOOL</a></li>
+  <li><a href="#STRING">STRING</a></li>
+  <li><a href="#MAIN">MAIN</a></li>
+  <li><a href="#DISPLAY">DISPLAY</a></li>
+  <li><a href="#IF">IF</a></li>
+  <li><a href="#WHILE">WHILE</a></li>
+  <li><a href="#ELSE">ELSE</a></li>
+  <li><a href="#ELSEIF">ELSEIF</a></li>
+  <li><a href="#GUARD">GUARD</a></li>
+  <li><a href="#DEF">DEF</a></li>
+  <li><a href="#NOT">NOT</a></li>
+  <li><a href="#TRUE">TRUE</a></li>
+  <li><a href="#FALSE">FALSE</a></li>
+  <li><a href="#AND">AND</a></li>
+  <li><a href="#OR">OR</a></li>
+  <li><a href="#program">program</a></li>
+  <li><a href="#programIdentifier">programIdentifier</a></li>
+  <li><a href="#funcblock">funcblock</a></li>
+  <li><a href="#defList">defList</a></li>
+  <li><a href="#mainblock">mainblock</a></li>
+  <li><a href="#statement">statement</a></li>
+  <li><a href="#assignment">assignment</a></li>
+  <li><a href="#lhs">lhs</a></li>
+  <li><a href="#rhs">rhs</a></li>
+  <li><a href="#varType">varType</a></li>
+  <li><a href="#declaration">declaration</a></li>
+  <li><a href="#ifStatement">ifStatement</a></li>
+  <li><a href="#ifBlock">ifBlock</a></li>
+  <li><a href="#elseifBlock">elseifBlock</a></li>
+  <li><a href="#elseBlock">elseBlock</a></li>
+  <li><a href="#condition">condition</a></li>
+  <li><a href="#whileStatement">whileStatement</a></li>
+  <li><a href="#display">display</a></li>
+  <li><a href="#guard">guard</a></li>
+  <li><a href="#paramList">paramList</a></li>
+  <li><a href="#defCall">defCall</a></li>
+  <li><a href="#argumentList">argumentList</a></li>
+  <li><a href="#argument">argument</a></li>
+  <li><a href="#defName">defName</a></li>
+  <li><a href="#varList">varList</a></li>
+  <li><a href="#definition">definition</a></li>
+  <li><a href="#definitionnoreturn">definitionnoreturn</a></li>
+  <li><a href="#statementList">statementList</a></li>
+  <li><a href="#expression">expression</a></li>
+  <li><a href="#simpleExpression">simpleExpression</a></li>
+  <li><a href="#term">term</a></li>
+  <li><a href="#factor">factor</a></li>
+  <li><a href="#variableIdentifier">variableIdentifier</a></li>
+  <li><a href="#variable">variable</a></li>
+  <li><a href="#relOperator">relOperator</a></li>
+  <li><a href="#addOperator">addOperator</a></li>
+  <li><a href="#mulOperator">mulOperator</a></li>
+  <li><a href="#sign">sign</a></li>
+  <li><a href="#numberConstant">numberConstant</a></li>
+  <li><a href="#stringConstant">stringConstant</a></li>
+  <li><a href="#booleanConstant">booleanConstant</a></li>
+  <li><a href="#NEWLINE">NEWLINE</a></li>
+  <li><a href="#WS">WS</a></li>
+  <li><a href="#DOUBLEQUOTE">DOUBLEQUOTE</a></li>
+  <li><a href="#STRINGWORD">STRINGWORD</a></li>
+  <li><a href="#COMMENT">COMMENT</a></li>
+  <li><a href="#COMMENT_CHARACTER">COMMENT_CHARACTER</a></li>
+  <li><a href="#STRING_CHAR">STRING_CHAR</a></li>
+  <li><a href="#IDENTIFIER">IDENTIFIER</a></li>
+  <li><a href="#INTEGER">INTEGER</a></li>
+  <li><a href="#A">A</a></li>
+  <li><a href="#B">B</a></li>
+  <li><a href="#C">C</a></li>
+  <li><a href="#D">D</a></li>
+  <li><a href="#E">E</a></li>
+  <li><a href="#F">F</a></li>
+  <li><a href="#G">G</a></li>
+  <li><a href="#H">H</a></li>
+  <li><a href="#I">I</a></li>
+  <li><a href="#J">J</a></li>
+  <li><a href="#K">K</a></li>
+  <li><a href="#L">L</a></li>
+  <li><a href="#M">M</a></li>
+  <li><a href="#N">N</a></li>
+  <li><a href="#O">O</a></li>
+  <li><a href="#P">P</a></li>
+  <li><a href="#Q">Q</a></li>
+  <li><a href="#R">R</a></li>
+  <li><a href="#S">S</a></li>
+  <li><a href="#T">T</a></li>
+  <li><a href="#U">U</a></li>
+  <li><a href="#V">V</a></li>
+  <li><a href="#W">W</a></li>
+  <li><a href="#X">X</a></li>
+  <li><a href="#Y">Y</a></li>
+  <li><a href="#Z">Z</a></li>
+</ol>
+</div>
+
+<div id="rules">
+<ul>
+  <li class="rule" id="NUMBER">
+  <h3>NUMBER <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">NUMBER</span> :  <a href="#N" class="token">N</a> <a href="#U" class="token">U</a> <a href="#M" class="token">M</a> <a href="#B" class="token">B</a> <a href="#E" class="token">E</a> <a href="#R" class="token">R</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/NUMBER.png" />
+  </div>
+  </li>
+  <li class="rule" id="BOOL">
+  <h3>BOOL <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">BOOL</span> :  <a href="#B" class="token">B</a> <a href="#O" class="token">O</a> <a href="#O" class="token">O</a> <a href="#L" class="token">L</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/BOOL.png" />
+  </div>
+  </li>
+  <li class="rule" id="STRING">
+  <h3>STRING <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">STRING</span> :  <a href="#S" class="token">S</a> <a href="#T" class="token">T</a> <a href="#R" class="token">R</a> <a href="#I" class="token">I</a> <a href="#N" class="token">N</a> <a href="#G" class="token">G</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/STRING.png" />
+  </div>
+  </li>
+  <li class="rule" id="MAIN">
+  <h3>MAIN <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">MAIN</span> :  <a href="#M" class="token">M</a> <a href="#A" class="token">A</a> <a href="#I" class="token">I</a> <a href="#N" class="token">N</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/MAIN.png" />
+  </div>
+  </li>
+  <li class="rule" id="DISPLAY">
+  <h3>DISPLAY <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">DISPLAY</span> :  <a href="#D" class="token">D</a> <a href="#I" class="token">I</a> <a href="#S" class="token">S</a> <a href="#P" class="token">P</a> <a href="#L" class="token">L</a> <a href="#A" class="token">A</a> <a href="#Y" class="token">Y</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/DISPLAY.png" />
+  </div>
+  </li>
+  <li class="rule" id="IF">
+  <h3>IF <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">IF</span> :  <a href="#I" class="token">I</a> <a href="#F" class="token">F</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/IF.png" />
+  </div>
+  </li>
+  <li class="rule" id="WHILE">
+  <h3>WHILE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">WHILE</span> :  <a href="#W" class="token">W</a> <a href="#H" class="token">H</a> <a href="#I" class="token">I</a> <a href="#L" class="token">L</a> <a href="#E" class="token">E</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/WHILE.png" />
+  </div>
+  </li>
+  <li class="rule" id="ELSE">
+  <h3>ELSE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">ELSE</span> :  <a href="#E" class="token">E</a> <a href="#L" class="token">L</a> <a href="#S" class="token">S</a> <a href="#E" class="token">E</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/ELSE.png" />
+  </div>
+  </li>
+  <li class="rule" id="ELSEIF">
+  <h3>ELSEIF <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">ELSEIF</span> :  <a href="#E" class="token">E</a> <a href="#L" class="token">L</a> <a href="#S" class="token">S</a> <a href="#E" class="token">E</a> <a href="#I" class="token">I</a> <a href="#F" class="token">F</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/ELSEIF.png" />
+  </div>
+  </li>
+  <li class="rule" id="GUARD">
+  <h3>GUARD <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">GUARD</span> :  <a href="#G" class="token">G</a> <a href="#U" class="token">U</a> <a href="#A" class="token">A</a> <a href="#R" class="token">R</a> <a href="#D" class="token">D</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/GUARD.png" />
+  </div>
+  </li>
+  <li class="rule" id="DEF">
+  <h3>DEF <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">DEF</span> :  <a href="#D" class="token">D</a> <a href="#E" class="token">E</a> <a href="#F" class="token">F</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/DEF.png" />
+  </div>
+  </li>
+  <li class="rule" id="NOT">
+  <h3>NOT <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">NOT</span> :  <a href="#N" class="token">N</a> <a href="#O" class="token">O</a> <a href="#T" class="token">T</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/NOT.png" />
+  </div>
+  </li>
+  <li class="rule" id="TRUE">
+  <h3>TRUE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">TRUE</span> :  <a href="#T" class="token">T</a> <a href="#R" class="token">R</a> <a href="#U" class="token">U</a> <a href="#E" class="token">E</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/TRUE.png" />
+  </div>
+  </li>
+  <li class="rule" id="FALSE">
+  <h3>FALSE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">FALSE</span> :  <a href="#F" class="token">F</a> <a href="#A" class="token">A</a> <a href="#L" class="token">L</a> <a href="#S" class="token">S</a> <a href="#E" class="token">E</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/FALSE.png" />
+  </div>
+  </li>
+  <li class="rule" id="AND">
+  <h3>AND <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">AND</span> :  <a href="#A" class="token">A</a> <a href="#N" class="token">N</a> <a href="#D" class="token">D</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/AND.png" />
+  </div>
+  </li>
+  <li class="rule" id="OR">
+  <h3>OR <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">OR</span> :  <a href="#O" class="token">O</a> <a href="#R" class="token">R</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/OR.png" />
+  </div>
+  </li>
+  <li class="rule" id="program">
+  <h3>program <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">program</span> :  <a href="#programIdentifier" class="rule">programIdentifier</a> <span class="literal">'{'</span> <span class="operator">(</span><a href="#funcblock" class="rule">funcblock</a><span class="operator">)</span><span class="operator">?</span> <a href="#mainblock" class="rule">mainblock</a> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/program.png" />
+  </div>
+  </li>
+  <li class="rule" id="programIdentifier">
+  <h3>programIdentifier <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">programIdentifier</span> :  <a href="#IDENTIFIER" class="token">IDENTIFIER</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/programIdentifier.png" />
+  </div>
+  </li>
+  <li class="rule" id="funcblock">
+  <h3>funcblock <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">funcblock</span> :  <a href="#defList" class="rule">defList</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/funcblock.png" />
+  </div>
+  </li>
+  <li class="rule" id="defList">
+  <h3>defList <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">defList</span> :  <span class="operator">(</span><a href="#definition" class="rule">definition</a> <span class="operator">|</span> <a href="#definitionnoreturn" class="rule">definitionnoreturn</a><span class="operator">)</span> <span class="operator">(</span><a href="#definition" class="rule">definition</a> <span class="operator">|</span> <a href="#definitionnoreturn" class="rule">definitionnoreturn</a><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/defList.png" />
+  </div>
+  </li>
+  <li class="rule" id="mainblock">
+  <h3>mainblock <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">mainblock</span> :  <a href="#MAIN" class="token">MAIN</a> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/mainblock.png" />
+  </div>
+  </li>
+  <li class="rule" id="statement">
+  <h3>statement <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">statement</span> :  <a href="#assignment" class="rule">assignment</a> <span class="operator">|</span> <a href="#ifStatement" class="rule">ifStatement</a> <span class="operator">|</span> <a href="#whileStatement" class="rule">whileStatement</a> <span class="operator">|</span> <a href="#guard" class="rule">guard</a> <span class="operator">|</span> <a href="#display" class="rule">display</a> <span class="operator">|</span> <a href="#defCall" class="rule">defCall</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/statement.png" />
+  </div>
+  </li>
+  <li class="rule" id="assignment">
+  <h3>assignment <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">assignment</span> :  <span class="operator">(</span><a href="#varType" class="rule">varType</a><span class="operator">)</span><span class="operator">?</span> <a href="#lhs" class="rule">lhs</a> <span class="literal">'='</span> <a href="#rhs" class="rule">rhs</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/assignment.png" />
+  </div>
+  </li>
+  <li class="rule" id="lhs">
+  <h3>lhs <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">lhs</span> :  <a href="#variable" class="rule">variable</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/lhs.png" />
+  </div>
+  </li>
+  <li class="rule" id="rhs">
+  <h3>rhs <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">rhs</span> :  <a href="#declaration" class="rule">declaration</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/rhs.png" />
+  </div>
+  </li>
+  <li class="rule" id="varType">
+  <h3>varType <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">varType</span> :  <a href="#NUMBER" class="token">NUMBER</a> <span class="operator">|</span> <a href="#BOOL" class="token">BOOL</a> <span class="operator">|</span> <a href="#STRING" class="token">STRING</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/varType.png" />
+  </div>
+  </li>
+  <li class="rule" id="declaration">
+  <h3>declaration <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">declaration</span> :  <a href="#expression" class="rule">expression</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/declaration.png" />
+  </div>
+  </li>
+  <li class="rule" id="ifStatement">
+  <h3>ifStatement <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">ifStatement</span> :  <a href="#ifBlock" class="rule">ifBlock</a> <a href="#elseifBlock" class="rule">elseifBlock</a><span class="operator">*</span> <a href="#elseBlock" class="rule">elseBlock</a><span class="operator">?</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/ifStatement.png" />
+  </div>
+  </li>
+  <li class="rule" id="ifBlock">
+  <h3>ifBlock <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">ifBlock</span> :  <a href="#IF" class="token">IF</a> <span class="literal">'('</span> <a href="#condition" class="rule">condition</a> <span class="literal">')'</span> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/ifBlock.png" />
+  </div>
+  </li>
+  <li class="rule" id="elseifBlock">
+  <h3>elseifBlock <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">elseifBlock</span> :  <a href="#ELSEIF" class="token">ELSEIF</a> <span class="literal">'('</span> <a href="#condition" class="rule">condition</a> <span class="literal">')'</span> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/elseifBlock.png" />
+  </div>
+  </li>
+  <li class="rule" id="elseBlock">
+  <h3>elseBlock <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">elseBlock</span> :  <a href="#ELSE" class="token">ELSE</a> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/elseBlock.png" />
+  </div>
+  </li>
+  <li class="rule" id="condition">
+  <h3>condition <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">condition</span> :  <a href="#expression" class="rule">expression</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/condition.png" />
+  </div>
+  </li>
+  <li class="rule" id="whileStatement">
+  <h3>whileStatement <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">whileStatement</span> :  <a href="#WHILE" class="token">WHILE</a> <span class="literal">'('</span> <a href="#condition" class="rule">condition</a> <span class="literal">')'</span> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/whileStatement.png" />
+  </div>
+  </li>
+  <li class="rule" id="display">
+  <h3>display <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">display</span> :  <span class="operator">(</span><a href="#DISPLAY" class="token">DISPLAY</a><span class="operator">)</span> <span class="literal">'('</span> <span class="operator">(</span><a href="#expression" class="rule">expression</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">')'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/display.png" />
+  </div>
+  </li>
+  <li class="rule" id="guard">
+  <h3>guard <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">guard</span> :  <a href="#GUARD" class="token">GUARD</a> <span class="literal">'('</span><a href="#paramList" class="rule">paramList</a> <span class="literal">')'</span> <span class="literal">'{'</span> <a href="#statementList" class="rule">statementList</a> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/guard.png" />
+  </div>
+  </li>
+  <li class="rule" id="paramList">
+  <h3>paramList <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">paramList</span> :  <a href="#condition" class="rule">condition</a> <span class="operator">(</span><span class="literal">','</span> <a href="#condition" class="rule">condition</a><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/paramList.png" />
+  </div>
+  </li>
+  <li class="rule" id="defCall">
+  <h3>defCall <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">defCall</span> :  <a href="#defName" class="rule">defName</a> <span class="literal">'('</span> <a href="#argumentList" class="rule">argumentList</a><span class="operator">?</span> <span class="literal">')'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/defCall.png" />
+  </div>
+  </li>
+  <li class="rule" id="argumentList">
+  <h3>argumentList <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">argumentList</span> :  <a href="#argument" class="rule">argument</a> <span class="operator">(</span> <span class="literal">','</span> <a href="#argument" class="rule">argument</a> <span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/argumentList.png" />
+  </div>
+  </li>
+  <li class="rule" id="argument">
+  <h3>argument <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">argument</span> :  <a href="#expression" class="rule">expression</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/argument.png" />
+  </div>
+  </li>
+  <li class="rule" id="defName">
+  <h3>defName <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">defName</span> :  <a href="#IDENTIFIER" class="token">IDENTIFIER</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/defName.png" />
+  </div>
+  </li>
+  <li class="rule" id="varList">
+  <h3>varList <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">varList</span> :  <span class="operator">(</span><a href="#varType" class="rule">varType</a> <a href="#variable" class="rule">variable</a><span class="operator">)</span> <span class="operator">(</span><span class="literal">','</span> <span class="operator">(</span><a href="#varType" class="rule">varType</a> <a href="#variable" class="rule">variable</a><span class="operator">)</span><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/varList.png" />
+  </div>
+  </li>
+  <li class="rule" id="definition">
+  <h3>definition <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">definition</span> :  <a href="#DEF" class="token">DEF</a> <a href="#defName" class="rule">defName</a> <span class="literal">'('</span> <a href="#varList" class="rule">varList</a><span class="operator">?</span> <span class="literal">':'</span> <span class="operator">(</span><a href="#varType" class="rule">varType</a> <a href="#variable" class="rule">variable</a><span class="operator">)</span> <span class="literal">')'</span> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/definition.png" />
+  </div>
+  </li>
+  <li class="rule" id="definitionnoreturn">
+  <h3>definitionnoreturn <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">definitionnoreturn</span> :  <a href="#DEF" class="token">DEF</a> <a href="#defName" class="rule">defName</a> <span class="literal">'('</span> <a href="#varList" class="rule">varList</a><span class="operator">?</span> <span class="literal">')'</span> <span class="literal">'{'</span> <span class="operator">(</span><a href="#statementList" class="rule">statementList</a><span class="operator">)</span><span class="operator">?</span> <span class="literal">'}'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/definitionnoreturn.png" />
+  </div>
+  </li>
+  <li class="rule" id="statementList">
+  <h3>statementList <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">statementList</span> :  <a href="#statement" class="rule">statement</a> <span class="literal">';'</span><span class="operator">(</span> <a href="#statement" class="rule">statement</a> <span class="literal">';'</span><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/statementList.png" />
+  </div>
+  </li>
+  <li class="rule" id="expression">
+  <h3>expression <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">expression</span> :  <a href="#simpleExpression" class="rule">simpleExpression</a> <span class="operator">(</span><a href="#relOperator" class="rule">relOperator</a> <a href="#simpleExpression" class="rule">simpleExpression</a><span class="operator">)</span><span class="operator">?</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/expression.png" />
+  </div>
+  </li>
+  <li class="rule" id="simpleExpression">
+  <h3>simpleExpression <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">simpleExpression</span> :  <a href="#sign" class="rule">sign</a><span class="operator">?</span> <a href="#term" class="rule">term</a> <span class="operator">(</span><a href="#addOperator" class="rule">addOperator</a> <a href="#term" class="rule">term</a><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/simpleExpression.png" />
+  </div>
+  </li>
+  <li class="rule" id="term">
+  <h3>term <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">term</span> :  <a href="#factor" class="rule">factor</a> <span class="operator">(</span><a href="#mulOperator" class="rule">mulOperator</a> <a href="#factor" class="rule">factor</a><span class="operator">)</span><span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/term.png" />
+  </div>
+  </li>
+  <li class="rule" id="factor">
+  <h3>factor <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">factor</span> :  <a href="#variable" class="rule">variable</a> <span class="operator">#</span> <a href="#variableFactor" class="rule">variableFactor</a> <span class="operator">|</span> <a href="#numberConstant" class="rule">numberConstant</a> <span class="operator">#</span> <a href="#numberFactor" class="rule">numberFactor</a> <span class="operator">|</span> <a href="#stringConstant" class="rule">stringConstant</a> <span class="operator">#</span> <a href="#stringFactor" class="rule">stringFactor</a> <span class="operator">|</span> <a href="#booleanConstant" class="rule">booleanConstant</a> <span class="operator">#</span> <a href="#booleanFactor" class="rule">booleanFactor</a> <span class="operator">|</span> <a href="#defCall" class="rule">defCall</a> <span class="operator">#</span> <a href="#defCallFactor" class="rule">defCallFactor</a> <span class="operator">|</span> <a href="#NOT" class="token">NOT</a> <a href="#factor" class="rule">factor</a> <span class="operator">#</span> <a href="#notFactor" class="rule">notFactor</a> <span class="operator">|</span> <span class="literal">'('</span> <a href="#expression" class="rule">expression</a> <span class="literal">')'</span> <span class="operator">#</span> <a href="#parenthesizedFactor" class="rule">parenthesizedFactor</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/factor.png" />
+  </div>
+  </li>
+  <li class="rule" id="variableIdentifier">
+  <h3>variableIdentifier <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">variableIdentifier</span> :  <a href="#IDENTIFIER" class="token">IDENTIFIER</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/variableIdentifier.png" />
+  </div>
+  </li>
+  <li class="rule" id="variable">
+  <h3>variable <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">variable</span> :  <a href="#variableIdentifier" class="rule">variableIdentifier</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/variable.png" />
+  </div>
+  </li>
+  <li class="rule" id="relOperator">
+  <h3>relOperator <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">relOperator</span> :  <span class="literal">'=='</span> <span class="operator">|</span> <span class="literal">'~'</span> <span class="operator">|</span> <span class="literal">'<'</span> <span class="operator">|</span> <span class="literal">'<='</span> <span class="operator">|</span> <span class="literal">'>'</span> <span class="operator">|</span> <span class="literal">'>='</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/relOperator.png" />
+  </div>
+  </li>
+  <li class="rule" id="addOperator">
+  <h3>addOperator <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">addOperator</span> :  <span class="literal">'+'</span> <span class="operator">|</span> <span class="literal">'-'</span> <span class="operator">|</span> <a href="#OR" class="token">OR</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/addOperator.png" />
+  </div>
+  </li>
+  <li class="rule" id="mulOperator">
+  <h3>mulOperator <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">mulOperator</span> :  <span class="literal">'*'</span> <span class="operator">|</span> <span class="literal">'/'</span> <span class="operator">|</span> <a href="#AND" class="token">AND</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/mulOperator.png" />
+  </div>
+  </li>
+  <li class="rule" id="sign">
+  <h3>sign <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">sign</span> :  <span class="literal">'+'</span> <span class="operator">|</span> <span class="literal">'-'</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/sign.png" />
+  </div>
+  </li>
+  <li class="rule" id="numberConstant">
+  <h3>numberConstant <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">numberConstant</span> :  <span class="operator">(</span><a href="#sign" class="rule">sign</a><span class="operator">)</span><span class="operator">?</span> <a href="#INTEGER" class="token">INTEGER</a> <span class="operator">(</span><span class="literal">'.'</span> <a href="#INTEGER" class="token">INTEGER</a><span class="operator">)</span><span class="operator">?</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/numberConstant.png" />
+  </div>
+  </li>
+  <li class="rule" id="stringConstant">
+  <h3>stringConstant <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">stringConstant</span> :  <a href="#STRINGWORD" class="token">STRINGWORD</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/stringConstant.png" />
+  </div>
+  </li>
+  <li class="rule" id="booleanConstant">
+  <h3>booleanConstant <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">booleanConstant</span> :  <span class="operator">(</span><a href="#TRUE" class="token">TRUE</a><span class="operator">)</span> <span class="operator">|</span> <span class="operator">(</span><a href="#FALSE" class="token">FALSE</a><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/booleanConstant.png" />
+  </div>
+  </li>
+  <li class="rule" id="NEWLINE">
+  <h3>NEWLINE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">NEWLINE</span> :  <span class="literal">'\r'</span><span class="operator">?</span> <span class="literal">'\n'</span> <span class="operator">-></span> <a href="#skip" class="rule">skip</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/NEWLINE.png" />
+  </div>
+  </li>
+  <li class="rule" id="WS">
+  <h3>WS <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">WS</span> :  [<span class="literal"> \t</span>]<span class="operator">+</span> <span class="operator">-></span> <a href="#skip" class="rule">skip</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/WS.png" />
+  </div>
+  </li>
+  <li class="rule" id="DOUBLEQUOTE">
+  <h3>DOUBLEQUOTE <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">DOUBLEQUOTE</span> :  <span class="operator">(</span><span class="literal">'"'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/DOUBLEQUOTE.png" />
+  </div>
+  </li>
+  <li class="rule" id="STRINGWORD">
+  <h3>STRINGWORD <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">STRINGWORD</span> :  <a href="#DOUBLEQUOTE" class="token">DOUBLEQUOTE</a> <a href="#STRING_CHAR" class="token">STRING_CHAR</a><span class="operator">*</span> <a href="#DOUBLEQUOTE" class="token">DOUBLEQUOTE</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/STRINGWORD.png" />
+  </div>
+  </li>
+  <li class="rule" id="COMMENT">
+  <h3>COMMENT <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">COMMENT</span> :  <span class="literal">'$'</span> <a href="#COMMENT_CHARACTER" class="token">COMMENT_CHARACTER</a><span class="operator">*</span> <span class="literal">'$'</span> <span class="operator">-></span> <a href="#skip" class="rule">skip</a> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/COMMENT.png" />
+  </div>
+  </li>
+  <li class="rule" id="COMMENT_CHARACTER">
+  <h3>COMMENT_CHARACTER <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">COMMENT_CHARACTER</span> :  <span class="operator">~</span><span class="operator">(</span><span class="literal">'$'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/COMMENT_CHARACTER.png" />
+  </div>
+  </li>
+  <li class="rule" id="STRING_CHAR">
+  <h3>STRING_CHAR <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">STRING_CHAR</span> :  <span class="operator">~</span><span class="operator">(</span><span class="literal">'"'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/STRING_CHAR.png" />
+  </div>
+  </li>
+  <li class="rule" id="IDENTIFIER">
+  <h3>IDENTIFIER <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">IDENTIFIER</span> :  [<span class="literal">a-zA-Z</span>][<span class="literal">a-zA-Z0-9</span>]<span class="operator">*</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/IDENTIFIER.png" />
+  </div>
+  </li>
+  <li class="rule" id="INTEGER">
+  <h3>INTEGER <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">INTEGER</span> :  [<span class="literal">0-9</span>]<span class="operator">+</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/INTEGER.png" />
+  </div>
+  </li>
+  <li class="rule" id="A">
+  <h3>A <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">A</span> :  <span class="operator">(</span><span class="literal">'a'</span> <span class="operator">|</span> <span class="literal">'A'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/A.png" />
+  </div>
+  </li>
+  <li class="rule" id="B">
+  <h3>B <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">B</span> :  <span class="operator">(</span><span class="literal">'b'</span> <span class="operator">|</span> <span class="literal">'B'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/B.png" />
+  </div>
+  </li>
+  <li class="rule" id="C">
+  <h3>C <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">C</span> :  <span class="operator">(</span><span class="literal">'c'</span> <span class="operator">|</span> <span class="literal">'C'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/C.png" />
+  </div>
+  </li>
+  <li class="rule" id="D">
+  <h3>D <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">D</span> :  <span class="operator">(</span><span class="literal">'d'</span> <span class="operator">|</span> <span class="literal">'D'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/D.png" />
+  </div>
+  </li>
+  <li class="rule" id="E">
+  <h3>E <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">E</span> :  <span class="operator">(</span><span class="literal">'e'</span> <span class="operator">|</span> <span class="literal">'E'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/E.png" />
+  </div>
+  </li>
+  <li class="rule" id="F">
+  <h3>F <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">F</span> :  <span class="operator">(</span><span class="literal">'f'</span> <span class="operator">|</span> <span class="literal">'F'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/F.png" />
+  </div>
+  </li>
+  <li class="rule" id="G">
+  <h3>G <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">G</span> :  <span class="operator">(</span><span class="literal">'g'</span> <span class="operator">|</span> <span class="literal">'G'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/G.png" />
+  </div>
+  </li>
+  <li class="rule" id="H">
+  <h3>H <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">H</span> :  <span class="operator">(</span><span class="literal">'h'</span> <span class="operator">|</span> <span class="literal">'H'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/H.png" />
+  </div>
+  </li>
+  <li class="rule" id="I">
+  <h3>I <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">I</span> :  <span class="operator">(</span><span class="literal">'i'</span> <span class="operator">|</span> <span class="literal">'I'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/I.png" />
+  </div>
+  </li>
+  <li class="rule" id="J">
+  <h3>J <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">J</span> :  <span class="operator">(</span><span class="literal">'j'</span> <span class="operator">|</span> <span class="literal">'J'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/J.png" />
+  </div>
+  </li>
+  <li class="rule" id="K">
+  <h3>K <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">K</span> :  <span class="operator">(</span><span class="literal">'k'</span> <span class="operator">|</span> <span class="literal">'K'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/K.png" />
+  </div>
+  </li>
+  <li class="rule" id="L">
+  <h3>L <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">L</span> :  <span class="operator">(</span><span class="literal">'l'</span> <span class="operator">|</span> <span class="literal">'L'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/L.png" />
+  </div>
+  </li>
+  <li class="rule" id="M">
+  <h3>M <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">M</span> :  <span class="operator">(</span><span class="literal">'m'</span> <span class="operator">|</span> <span class="literal">'M'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/M.png" />
+  </div>
+  </li>
+  <li class="rule" id="N">
+  <h3>N <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">N</span> :  <span class="operator">(</span><span class="literal">'n'</span> <span class="operator">|</span> <span class="literal">'N'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/N.png" />
+  </div>
+  </li>
+  <li class="rule" id="O">
+  <h3>O <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">O</span> :  <span class="operator">(</span><span class="literal">'o'</span> <span class="operator">|</span> <span class="literal">'O'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/O.png" />
+  </div>
+  </li>
+  <li class="rule" id="P">
+  <h3>P <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">P</span> :  <span class="operator">(</span><span class="literal">'p'</span> <span class="operator">|</span> <span class="literal">'P'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/P.png" />
+  </div>
+  </li>
+  <li class="rule" id="Q">
+  <h3>Q <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">Q</span> :  <span class="operator">(</span><span class="literal">'q'</span> <span class="operator">|</span> <span class="literal">'Q'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/Q.png" />
+  </div>
+  </li>
+  <li class="rule" id="R">
+  <h3>R <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">R</span> :  <span class="operator">(</span><span class="literal">'r'</span> <span class="operator">|</span> <span class="literal">'R'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/R.png" />
+  </div>
+  </li>
+  <li class="rule" id="S">
+  <h3>S <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">S</span> :  <span class="operator">(</span><span class="literal">'s'</span> <span class="operator">|</span> <span class="literal">'S'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/S.png" />
+  </div>
+  </li>
+  <li class="rule" id="T">
+  <h3>T <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">T</span> :  <span class="operator">(</span><span class="literal">'t'</span> <span class="operator">|</span> <span class="literal">'T'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/T.png" />
+  </div>
+  </li>
+  <li class="rule" id="U">
+  <h3>U <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">U</span> :  <span class="operator">(</span><span class="literal">'u'</span> <span class="operator">|</span> <span class="literal">'U'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/U.png" />
+  </div>
+  </li>
+  <li class="rule" id="V">
+  <h3>V <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">V</span> :  <span class="operator">(</span><span class="literal">'v'</span> <span class="operator">|</span> <span class="literal">'V'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/V.png" />
+  </div>
+  </li>
+  <li class="rule" id="W">
+  <h3>W <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">W</span> :  <span class="operator">(</span><span class="literal">'w'</span> <span class="operator">|</span> <span class="literal">'W'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/W.png" />
+  </div>
+  </li>
+  <li class="rule" id="X">
+  <h3>X <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">X</span> :  <span class="operator">(</span><span class="literal">'x'</span> <span class="operator">|</span> <span class="literal">'X'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/X.png" />
+  </div>
+  </li>
+  <li class="rule" id="Y">
+  <h3>Y <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">Y</span> :  <span class="operator">(</span><span class="literal">'y'</span> <span class="operator">|</span> <span class="literal">'Y'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/Y.png" />
+  </div>
+  </li>
+  <li class="rule" id="Z">
+  <h3>Z <a class="topLink" title="Go to top" href="AKA.g4.html">Top</a></h3>
+  <div class="doc">
+    <p>
+    </p>
+  </div>
+  <div class="ebnf">
+  <h4>Text notation:</h4>
+  <div>
+    <span class="rule">Z</span> :  <span class="operator">(</span><span class="literal">'z'</span> <span class="operator">|</span> <span class="literal">'Z'</span><span class="operator">)</span> ;
+  </div>
+  </div>
+  <div class="railroad">
+  <h4>Visual notation:</h4>
+  <img border="0" src="images/Z.png" />
+  </div>
+  </li>
+</ul>
+</div>
+</div>
+<footer>Generated by: <a href="https://github.com/jknack/antlr4ide">ANTLR 4 IDE</a>. Copyright (c) 2013 <a href="https://twitter.com/edgarespina">Edgar Espina</a></footer>
+</body>
+</html>

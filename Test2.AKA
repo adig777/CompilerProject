@@ -1,0 +1,42 @@
+test2 {
+
+	def increment(number oldNum : number newNum) {
+		newNum = oldNum + 1;
+	}
+	
+	main {
+		number i = 0;
+		
+		while (i <= 10) 
+		{
+			if (i < 3) {
+				display("i < 3");
+			} elseif (i < 5) {
+				display("i < 6");
+			} elseif (i < 8) {
+				display("i < 8");
+			} else {
+				display("i <= 10");
+			}
+			i = increment(i);
+		}
+	}
+
+}
+
+$ Output:
+
+i < 3
+i < 3
+i < 3
+i < 6
+i < 6
+i < 8
+i < 8
+i < 8
+i <= 10
+i <= 10
+i <= 10
+
+[0 milliseconds execution time.]
+$

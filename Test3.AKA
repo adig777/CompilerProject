@@ -1,0 +1,43 @@
+test3 {
+
+
+	def fibonacci(number n) {
+	    number a = 0;
+	    number b = 1;
+	
+	    display("Fibonacci sequence up to" + " " + n);
+	    display();
+	    display(a);
+	    display(b);
+		number next = -1;
+	    while (n > 2) {
+	        next = a + b;
+	        display(next);
+	        a = b;
+	        b = next;
+	        n = n - 1;
+	    }
+	}
+	
+	main {
+		fibonacci(10);
+	}
+}
+
+
+$ Output:
+Fibonacci sequence up to 10.0
+
+0.000000
+1.000000
+1.000000
+2.000000
+3.000000
+5.000000
+8.000000
+13.000000
+21.000000
+34.000000
+
+[1 milliseconds execution time.]
+$
